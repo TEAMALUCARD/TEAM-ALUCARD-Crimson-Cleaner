@@ -1,0 +1,33 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Herramientas y cachés
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Empaquetado y distribución
+build/
+dist/
+*.egg-info/
+
+# Datos generados en tiempo de ejecución
+logs/
+*.log
+backups/
+
+# IDEs y sistema operativo
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

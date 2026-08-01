@@ -1,0 +1,20 @@
+{
+  "app_name": "Crimson Cleaner",
+  "team_name": "TEAM ALUCARD",
+  "version": "v0.1.1 Alpha",
+  "developer": "Killgore793",
+  "refresh_interval_ms": 1000,
+  "theme": "dark_crimson",
+  "log_level": "INFO",
+  "auto_start_with_windows": false,
+  "minimize_to_tray": false,
+  "notifications_enabled": true,
+  "language": "es",
+  "excluded_directories": [],
+  "optimization": {
+    "auto_optimize_enabled": false,
+    "ram_threshold_percent": 85,
+    "clean_standby_list": true,
+    "clean_working_sets": true
+  }
+}
