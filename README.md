@@ -3,6 +3,8 @@
 **Version:** `v0.1.1 Alpha`  
 **Dev:** `Killgore793`  
 
+Crimson Cleaner v0.2 Alpha — Stage 1: Cleaning Execution Framework (DRY_RUN_ONLY).
+
 ---
 
 ## 📌 Visión del Proyecto

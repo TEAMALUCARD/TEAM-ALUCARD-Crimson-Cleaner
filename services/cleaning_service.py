@@ -8,6 +8,7 @@ from time import perf_counter
 
 from PySide6.QtCore import QObject, Qt, QThread, Signal, Slot
 
+from core.cleaning_execution_models import CleaningOperation, CleaningOperationAction
 from core.cleaning_models import CleaningScanReport, ModuleScanResult, ScanFailure, ScanStatus
 from core.workers import WorkerBase
 from services.cleaners import BrowserCacheCleaner, PrefetchCleaner, RecycleBinCleaner, TempFilesCleaner, WindowsUpdateCleaner
@@ -141,6 +142,35 @@ class CleaningService(QObject):
     def scan_module(self, module_id: str) -> ModuleScanResult:
         """Provides the compatible synchronous API for one non-UI caller."""
         return _scan_module(self._resolve_modules((module_id,))[0])
+
+    def create_operations_from_report(self, report: CleaningScanReport) -> tuple[CleaningOperation, ...]:
+        """Builds pending, reviewable operations from an existing scan report.
+
+        Scan locations are aggregate candidates, so this method does not enumerate,
+        access, or modify individual files.
+        """
+        return tuple(
+            operation
+            for result in report.results
+            for operation in self.create_operations_from_result(result)
+        )
+
+    @staticmethod
+    def create_operations_from_result(result: ModuleScanResult) -> tuple[CleaningOperation, ...]:
+        """Builds one pending DELETE candidate per non-empty successful location."""
+        if result.status not in (ScanStatus.COMPLETED, ScanStatus.PARTIAL):
+            return ()
+        return tuple(
+            CleaningOperation(
+                module_id=result.module_id,
+                target_path=location.path,
+                proposed_action=CleaningOperationAction.DELETE,
+                estimated_size_bytes=location.size_bytes,
+                risk_level=result.risk_level,
+            )
+            for location in result.locations
+            if location.error_message is None and location.file_count > 0
+        )
 
     def _resolve_modules(self, module_ids: tuple[str, ...] | None) -> tuple[CleaningModule, ...]:
         if module_ids is None:
